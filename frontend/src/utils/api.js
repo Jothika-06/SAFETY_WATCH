@@ -11,18 +11,6 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-API.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err.response?.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "/login";
-    }
-    return Promise.reject(err);
-  }
-);
-
 export const registerUser = (data) => API.post("/auth/register", data);
 export const loginUser = (data) => API.post("/auth/login", data);
 export const getMe = () => API.get("/auth/me");
