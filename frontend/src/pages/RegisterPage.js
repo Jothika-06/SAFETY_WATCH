@@ -2,9 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../utils/api";
 import { useAuth } from "../context/AuthContext";
-import API from "../utils/api";
-ho
-fetch(`${API}/api/auth/register`, ...)
 
 const FAKE_DOMAINS = new Set(["test.com","fake.com","example.com","mailinator.com","guerrillamail.com","tempmail.com","throwaway.email","yopmail.com","10minutemail.com","trashmail.com","dispostable.com","spamgourmet.com","maildrop.cc","sharklasers.com","spam4.me","tempr.email","binkmail.com","fakeinbox.com","getnada.com","harakirimail.com","trashmail.me","trashmail.io","trashmail.at","trashmail.net","trashmail.org","mytempemail.com","mintemail.com","getairmail.com","temporaryemail.net","temporary-email.com","guerrillamail.info","trash-mail.com","mailnull.com"]);
 const TEST_NAMES = new Set(["test","fake","sample","demo","placeholder","noemail","noreply","invalid","dummy","abc","xyz","foo","bar","baz","temp","null","none","random","asdf","qwerty"]);
