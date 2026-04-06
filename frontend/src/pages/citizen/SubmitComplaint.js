@@ -37,26 +37,56 @@ export default function SubmitComplaint() {
   };
 
   const fetchGPS = () => {
-    if (!navigator.geolocation) { setErr("Geolocation not supported by this browser."); return; }
-    setGpsLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords: { latitude, longitude } }) => {
-        try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
-          const d = await res.json();
-          setForm(f => ({ ...f, location: d.display_name || `${latitude.toFixed(5)}, ${longitude.toFixed(5)}` }));
-        } catch {
-          setForm(f => ({ ...f, location:`${latitude.toFixed(5)}, ${longitude.toFixed(5)}` }));
-        }
-        setGpsLoading(false);
-      },
-      (e) => {
-        setGpsLoading(false);
-        setErr(e.code === e.PERMISSION_DENIED ? "Location access denied. Please type your location." : "Could not detect location. Please enter manually.");
-      },
-      { timeout:10000, maximumAge:60000 }
-    );
-  };
+  if (!navigator.geolocation) {
+    setErr("Geolocation not supported.");
+    return;
+  }
+
+  setGpsLoading(true);
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+        );
+        const d = await res.json();
+        const addr = d.address;
+
+        const locationName =
+          addr.road ||
+          addr.suburb ||
+          addr.village ||
+          addr.town ||
+          addr.city ||
+          addr.county ||
+          addr.state;
+
+        const formatted = `${locationName}, ${addr.state || ""}, ${addr.country || ""}`;
+
+        setForm(f => ({ ...f, location: formatted }));
+      } catch {
+        setForm(f => ({
+          ...f,
+          location: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+        }));
+      }
+
+      setGpsLoading(false);
+    },
+    () => {
+      setGpsLoading(false);
+      setErr("Location access denied.");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+  );
+};
 
   const handleSubmit = async () => {
     if (!form.location.trim()) return setErr("Please enter the location of the issue.");
