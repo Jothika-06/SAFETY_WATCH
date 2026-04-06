@@ -46,16 +46,17 @@ function isValidEmail(email) {
 // POST /api/auth/register
 
 router.post("/register", async (req, res) => {
-  try {
-    console.log("REGISTER BODY:", req.body);
+  console.log("REGISTER ROUTE HIT");
+  console.log("BODY:", req.body);
 
+  try {
     const { name, email, password, role, department } = req.body;
 
     if (!name || !email || !password)
       return res.status(400).json({ message: "All fields required." });
 
     if (!isValidEmail(email))
-      return res.status(400).json({ message: "Invalid email address." });
+      return res.status(400).json({ message: "Invalid email." });
 
     const exists = await User.findOne({ email });
     if (exists)
@@ -66,7 +67,7 @@ router.post("/register", async (req, res) => {
       email,
       password,
       role: role || "citizen",
-      department: department || null,
+      department: department || null
     });
 
     console.log("USER CREATED:", user);
@@ -79,10 +80,11 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        department: user.department,
+        department: user.department
       },
-      token,
+      token
     });
+
   } catch (err) {
     console.log("REGISTER ERROR:", err);
     res.status(500).json({ message: err.message });
