@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: process.env.REACT_APP_API_URL + "/api",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -32,6 +32,7 @@ export const getComplaintById = (id) => API.get(`/complaints/${id}`);
 export const getAllComplaints = () => API.get("/admin/complaints");
 export const getDashboardStats = () => API.get("/admin/stats");
 export const getDepartmentComplaints = () => API.get("/department/complaints");
-export const resolveComplaint = (id, data) => API.put(`/department/complaints/${id}`, data);
+export const resolveComplaint = (id, data) =>
+  API.put(`/department/complaints/${id}`, data);
 
 export default API;
