@@ -10,7 +10,7 @@ const app = express();
 
 // ── Middleware ────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: ["https://safety-watch-two.vercel.app"],
   credentials: true
 }));
 app.use(express.json({ limit: "20mb" }));         // allow large base64 images
