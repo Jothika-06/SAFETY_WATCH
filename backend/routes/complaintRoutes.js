@@ -6,12 +6,29 @@ const AIAnalysis = require("../models/AIAnalysis");
 const { protect, authorizeRoles } = require("../middleware/authMiddleware");
 
 const categoryToDept = {
-  Electrical:    "Electrical Department",
-  Roads:         "Road Maintenance Department",
-  Sanitation:    "Sanitation Department",
-  "Water Supply":"Water Supply Department",
-  Emergency:     "Emergency Department",
-  Other:         "General Department",
+  Electrical: "Electrical Department",
+  Electricity: "Electrical Department",
+  Streetlight: "Electrical Department",
+
+  Road: "Road Maintenance Department",
+  Roads: "Road Maintenance Department",
+  Pothole: "Road Maintenance Department",
+
+  Garbage: "Sanitation Department",
+  Sanitation: "Sanitation Department",
+  Waste: "Sanitation Department",
+
+  Water: "Water Supply Department",
+  "Water Supply": "Water Supply Department",
+  Pipe: "Water Supply Department",
+  Leak: "Water Supply Department",
+
+  Drainage: "Drainage Department",
+  Sewage: "Drainage Department",
+
+  Emergency: "Emergency Department",
+
+  Other: "General Department"
 };
 
 // ── POST /api/complaints — Submit complaint (with optional base64 image) ──
@@ -90,3 +107,23 @@ router.get("/:id", protect, async (req, res) => {
 });
 
 module.exports = router;
+const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/analyze`, { description });
+
+console.log("AI RESPONSE:", aiResponse.data);
+
+category        = aiResponse.data.category;
+severity        = aiResponse.data.severity;
+confidenceScore = aiResponse.data.confidence_score;
+confidenceScore = aiResponse.data.confidence_score || 0.5;
+try {
+  const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/analyze`, { description });
+
+  console.log("AI RESPONSE:", aiResponse.data);
+
+  category        = aiResponse.data.category || "Other";
+  severity        = aiResponse.data.severity || "Low";
+  confidenceScore = aiResponse.data.confidence_score || 0.5;
+
+} catch (aiError) {
+  console.log("⚠️ AI service unavailable, using defaults");
+}
