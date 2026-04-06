@@ -7,7 +7,7 @@ const FAKE_DOMAINS = new Set(["test.com","fake.com","example.com","mailinator.co
 const TEST_NAMES = new Set(["test","fake","sample","demo","placeholder","noemail","noreply","invalid","dummy","abc","xyz","foo","bar","baz","temp","null","none","random","asdf","qwerty"]);
 
 function validateEmail(email) {
-  const fmt = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  const fmt = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!email)             return "Email address is required.";
   if (!fmt.test(email))   return "Enter a valid email (e.g. john@gmail.com).";
   if (email.includes("..")) return "Email cannot contain consecutive dots.";
