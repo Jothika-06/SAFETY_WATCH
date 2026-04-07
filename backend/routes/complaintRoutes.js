@@ -107,23 +107,3 @@ router.get("/:id", protect, async (req, res) => {
 });
 
 module.exports = router;
-const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/analyze`, { description });
-
-console.log("AI RESPONSE:", aiResponse.data);
-
-category        = aiResponse.data.category;
-severity        = aiResponse.data.severity;
-confidenceScore = aiResponse.data.confidence_score;
-confidenceScore = aiResponse.data.confidence_score || 0.5;
-try {
-  const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/analyze`, { description });
-
-  console.log("AI RESPONSE:", aiResponse.data);
-
-  category        = aiResponse.data.category || "Other";
-  severity        = aiResponse.data.severity || "Low";
-  confidenceScore = aiResponse.data.confidence_score || 0.5;
-
-} catch (aiError) {
-  console.log("⚠️ AI service unavailable, using defaults");
-}
